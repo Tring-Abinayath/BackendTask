@@ -16,7 +16,7 @@ export class Questions{
 
     @OneToOne(()=>Options)
     @JoinColumn({name:"answer"})
-    answer!:Options;
+    answerOption!:Options;
 
     @OneToMany(()=>Options,(option)=>option.question)
     question!:Options[]

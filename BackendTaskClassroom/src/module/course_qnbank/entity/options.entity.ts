@@ -9,7 +9,7 @@ export class Options{
     @Column()
     option!:string;
 
-    @ManyToOne(()=>Questions,(question)=>question.qn)
+    @ManyToOne(()=>Questions,(question)=>question.question)
     @JoinColumn({name:"qn_id"})
     question!:Questions;
 
