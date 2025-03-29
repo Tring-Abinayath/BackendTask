@@ -1,0 +1,1 @@
+This is the backend system for a Classroom Management platform where admins can add courses, course materials, quizzes, and assignments, while students can view the courses, complete assignments, and take quizzes.
