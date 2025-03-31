@@ -13,8 +13,13 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@apollo/server": "^4.11.3",
+    "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.13.14",
+    "apollo-server": "^3.13.0",
+    "bcryptjs": "^3.0.2",
     "dotenv": "^16.4.7",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.14.1",
     "reflect-metadata": "^0.2.2",
     "ts-node": "^10.9.2",

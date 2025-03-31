@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany, ManyToOne, OneToMany, BaseEntity } from "typeorm";
 import { StudentAssignment } from "../../student/entity/student_assignment.entity";
 import { StudentScore } from "../../student/entity/student_score.entity";
 
@@ -15,7 +15,7 @@ export class User {
   @Column({ type: "varchar", length: 50, unique: true })
   u_email!: string;
 
-  @Column({ type: "varchar", length: 8 })
+  @Column({ type: "varchar", length: 255 })
   u_password!: string;
 
   @Column({
