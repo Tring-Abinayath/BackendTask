@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { User } from "./entity/user.entity";
+import { User,userRole } from "./entity/user.entity";
 import { postgresDataSource } from "../../db/dbConnect";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
@@ -25,13 +25,14 @@ export const validEmailAndPassword = async (u_email: string, u_password: string)
     }
 }
 
-export const signup = async ({ createUser }: { createUser: { u_email: string, u_password: string } }) => {
-    const { u_email, u_password } = createUser
+export const signup = async ({ createUser }: { createUser: { u_email: string, u_password: string, u_role:string } }) => {
+    const { u_email, u_password,u_role } = createUser
     try {
         await existingUser(u_email)
         await validEmailAndPassword(u_email, u_password)
         const hashedPassword = await bcrypt.hash(u_password, 10);
-        const newUser = userRepository.create({ u_email, u_password: hashedPassword });
+        const role: userRole = u_role ? (u_role as userRole) : userRole.Student;
+        const newUser = userRepository.create({ u_email, u_password: hashedPassword,u_role:role });
         await userRepository.save(newUser)
         return "User created successfully"
     } catch (err) {

@@ -15,11 +15,11 @@ export const userResolvers = {
         }
     },
     Mutation:{
-        signup:async(_:any,{createUser}:{createUser:{u_email:string,u_password:string}})=>{
-            return await signup({createUser});
+        signup:async(_:any,{createUser}:{createUser:{u_email:string,u_password:string,u_role:string}})=>{
+            return signup({createUser});
         },
         signin:async(_:any,{u_email,u_password}:{u_email:string,u_password:string})=>{
-            return await signin({u_email,u_password})
+            return signin({u_email,u_password})
         }
     }
 }

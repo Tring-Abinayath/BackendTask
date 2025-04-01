@@ -1,11 +1,17 @@
 import { gql } from "apollo-server";
 
-export const userTypeDefs=gql `
+export const userTypeDefs = gql`
+
+    enum UserRole {
+    admin
+    student
+  }
+
     type User {
         u_id: String
         u_email: String
         u_password:String
-        u_role: String
+        u_role: UserRole
         u_created_at:String
     }
     type Query {
@@ -16,6 +22,7 @@ export const userTypeDefs=gql `
     input CreateUser{
         u_email:String!
         u_password:String!
+        u_role:UserRole
     }
 
     type Token{
