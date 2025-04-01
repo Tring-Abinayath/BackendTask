@@ -4,8 +4,8 @@ import { User } from "../../user/entity/user.entity";
 
 @Entity({ name: "student_score" })
 export class StudentScore {
-    @PrimaryGeneratedColumn("uuid")
-    sc_id!:string;
+    @PrimaryGeneratedColumn("uuid",{name:"sc_id"})
+    scId!:string;
 
     @Column()
     score!: string;
@@ -16,14 +16,14 @@ export class StudentScore {
 
     @ManyToOne(() => User, (user) => user.scores)
     @JoinColumn({ name: "u_id" })
-    user_score!: User;
+    userScore!: User;
 
-    @CreateDateColumn({ type: "time with time zone", default: "NOW()" })
-    sc_created_at!: Date;
+    @CreateDateColumn({ type: "timestamp with time zone",name:"sc_created_at"})
+    scCreatedAt!: Date;
 
-    @UpdateDateColumn({ type: "time with time zone", default: "NOW()" })
-    sc_updated_at!: Date;
+    @UpdateDateColumn({ type: "timestamp with time zone",name:"sc_updated_at", default: "NOW()" })
+    scUpdatedAt!: Date;
 
-    @DeleteDateColumn({ type: "time with time zone", nullable: true })
-    sc_deleted_at?: Date;
+    @DeleteDateColumn({ type: "timestamp with time zone",name:"sc_deleted_at", nullable: true })
+    scDeletedAt?: Date;
 }

@@ -9,34 +9,35 @@ export enum userRole {
 
 @Entity({ name: "users" })
 export class User {
-  @PrimaryGeneratedColumn("uuid")
-  u_id!: string;
+  @PrimaryGeneratedColumn("uuid",{name:"u_id"})
+  uId!: string;
 
-  @Column({ type: "varchar", length: 50, unique: true })
-  u_email!: string;
+  @Column({ type: "varchar", length: 50, unique: true, name:"u_email"})
+  uEmail!: string;
 
-  @Column({ type: "varchar", length: 8 })
-  u_password!: string;
+  @Column({ type: "varchar", length: 8, name:"u_password" })
+  uPassword!: string;
 
   @Column({
     type: "enum",
     enum: userRole,
-    default: userRole.Student
+    default: userRole.Student,
+    name:"u_role"
   })
-  u_role!: userRole;
+  uRole!: userRole;
 
   @OneToMany(() => StudentAssignment, (assignment) => assignment.student)
   assignment!: StudentAssignment[];
 
-  @OneToMany(() => StudentScore, (score) => score.user_score)
+  @OneToMany(() => StudentScore, (score) => score.userScore)
   scores!: StudentScore[];
 
-  @CreateDateColumn({ type: "timestamp with time zone", default: 'NOW()' })
-  u_created_at!: Date;
+  @CreateDateColumn({ type: "timestamp with time zone",name:"u_created_at"})
+  uCreatedAt!: Date;
 
-  @UpdateDateColumn({ type: "timestamp with time zone", default: 'NOW()' })
-  u_updated_at!: Date;
+  @UpdateDateColumn({ type: "timestamp with time zone",name:"u_updated_at", default: "NOW()" })
+  uUpdatedAt!: Date;
 
-  @DeleteDateColumn({ type: "timestamp with time zone", nullable: true })
-  u_deleted_at?: Date;
+  @DeleteDateColumn({ type: "timestamp with time zone",name:"u_deleted_at", nullable: true })
+  uDeletedAt?: Date;
 }

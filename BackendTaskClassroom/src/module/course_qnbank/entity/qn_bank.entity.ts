@@ -5,11 +5,11 @@ import { StudentScore } from "../../student/entity/student_score.entity";
 
 @Entity({name:"qn_bank"})
 export class QnBank{
-    @PrimaryGeneratedColumn("uuid")
-    qb_id!:string;
+    @PrimaryGeneratedColumn("uuid",{name:"qb_id"})
+    qbId!:string;
 
-    @Column({type:"varchar",length:30})
-    qb_name!:string;
+    @Column({type:"varchar",length:30,name:"qb_name"})
+    qbName!:string;
 
     @ManyToOne(()=>Courses,(course)=>course.qnBank)
     @JoinColumn({name:"c_id"})
@@ -21,12 +21,12 @@ export class QnBank{
     @OneToOne(() => StudentScore, (score) => score.qnBank)
     score!: StudentScore;
 
-    @CreateDateColumn({type:"time with time zone",default:"NOW()"})
-    qb_created_at!:Date;
+    @CreateDateColumn({type:"timestamp with time zone",name:"qb_created_at"})
+    qbCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"time with time zone",default:"NOW()"})
-    qb_updated_at!:Date;
+    @UpdateDateColumn({type:"timestamp with time zone",name:"qb_updated_at",default:"NOW()"})
+    qbUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"time with time zone", nullable: true })
-    qb_deleted_at?:Date;
+    @DeleteDateColumn({type:"timestamp with time zone",name:"qb_deleted_at", nullable: true })
+    qbDeletedAt?:Date;
 }

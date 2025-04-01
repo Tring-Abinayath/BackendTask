@@ -4,10 +4,10 @@ import { Options } from "./options.entity";
 
 @Entity({name:"questions"})
 export class Questions{
-    @PrimaryGeneratedColumn("uuid")
-    qn_id!:string;
+    @PrimaryGeneratedColumn("uuid",{name:"qn_id"})
+    qnId!:string;
 
-    @Column()
+    @Column({name:"qn"})
     qn!:string;
 
     @ManyToOne(()=>QnBank,(qnBank)=>qnBank.question)
@@ -21,12 +21,12 @@ export class Questions{
     @OneToMany(()=>Options,(option)=>option.question)
     question!:Options[]
 
-    @CreateDateColumn({type:"time with time zone",default:"NOW()"})
-    qn_created_at!:Date;
+    @CreateDateColumn({type:"timestamp with time zone",name:"qn_created_at"})
+    qnCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"time with time zone",default:"NOW()"})
-    qn_updated_at!:Date;
+    @UpdateDateColumn({type:"timestamp with time zone",name:"qn_updated_at",default:"NOW()"})
+    qnUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"time with time zone", nullable: true })
-    qn_deleted_at?:Date;
+    @DeleteDateColumn({type:"timestamp with time zone",name:"qn_deleted_at", nullable: true })
+    qnDeletedAt?:Date;
 }

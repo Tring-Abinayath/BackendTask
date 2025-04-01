@@ -3,22 +3,22 @@ import { Courses } from "./courses.entity";
 
 @Entity({name:"course_material"})
 export class CourseMaterial{
-    @PrimaryGeneratedColumn("uuid")
-    c_mat_id!:string;
+    @PrimaryGeneratedColumn("uuid",{name:"c_mat_id"})
+    cMatId!:string;
 
-    @Column()
-    c_mat_upload!:string;
+    @Column({name:"c_mat_upload"})
+    cMatUpload!:string;
 
     @ManyToOne(()=>Courses,(course)=>course.courseMaterials)
     @JoinColumn({name:"c_id"})
     course!: Courses
 
-    @CreateDateColumn({type:"time with time zone",default:"NOW()"})
-    c_mat_created_at!:Date;
+    @CreateDateColumn({type:"timestamp with time zone",name:"c_mat_created_at"})
+    cMatCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"time with time zone",default:"NOW()"})
-    c_mat_updated_at!:Date;
+    @UpdateDateColumn({type:"timestamp with time zone",name:"c_mat_updated_at",default:"NOW()"})
+    cMatUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"time with time zone", nullable: true })
-    c_mat_deleted_at?:Date;
+    @DeleteDateColumn({type:"timestamp with time zone",name:"c_mat_updated_at", nullable: true })
+    cMatDeletedAt?:Date;
 }
