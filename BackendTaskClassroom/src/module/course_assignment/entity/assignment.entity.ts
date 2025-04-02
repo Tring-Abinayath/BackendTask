@@ -4,14 +4,14 @@ import { StudentAssignment } from "../../student/entity/student_assignment.entit
 
 @Entity({name:"assignments"})
 export class Assignment{
-    @PrimaryGeneratedColumn("uuid")
-    a_id!:string;
+    @PrimaryGeneratedColumn("uuid",{name:"a_id"})
+    aId!:string;
 
-    @Column()
-    a_qn!:string;
+    @Column({name:"a_qn"})
+    aQn!:string;
 
-    @Column()
-    a_upload!:string;
+    @Column({name:"a_upload"})
+    aUpload!:string;
 
     @ManyToOne(()=>Courses,(course)=>course.assignment)
     @JoinColumn({name:"c_id"})
@@ -20,12 +20,12 @@ export class Assignment{
     @OneToMany(()=>StudentAssignment,(studAssignment)=>studAssignment.assignment)
     studentAssignment!:StudentAssignment[]
 
-    @CreateDateColumn({type:"time with time zone",default:"NOW()"})
-    a_created_at!:Date;
+    @CreateDateColumn({type:"timestamp with time zone",name:"a_created_at"})
+    aCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"time with time zone",default:"NOW()"})
-    a_updated_at!:Date;
+    @UpdateDateColumn({type:"timestamp with time zone",name:"a_updated_at",default:"NOW()"})
+    aUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"time with time zone", nullable: true })
-    a_deleted_at?:Date;
+    @DeleteDateColumn({type:"timestamp with time zone",name:"a_deleted_at",nullable: true })
+    aDeletedAt?:Date;
 }

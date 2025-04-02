@@ -3,22 +3,22 @@ import { Questions } from "./questions.entity";
 
 @Entity({name:"options"})
 export class Options{
-    @PrimaryGeneratedColumn("uuid")
-    op_id!:string;
+    @PrimaryGeneratedColumn("uuid",{name:"op_id"})
+    opId!:string;
 
-    @Column()
+    @Column({name:"option"})
     option!:string;
 
     @ManyToOne(()=>Questions,(question)=>question.question)
     @JoinColumn({name:"qn_id"})
     question!:Questions;
 
-    @CreateDateColumn({type:"time with time zone",default:"NOW()"})
-    op_created_at!:Date;
+    @CreateDateColumn({type:"timestamp with time zone",name:"op_created_at"})
+    opCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"time with time zone",default:"NOW()"})
-    op_updated_at!:Date;
+    @UpdateDateColumn({type:"timestamp with time zone",name:"op_updated_at",default:"NOW()"})
+    opUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"time with time zone",nullable:true})
-    op_deleted_at?:Date;
+    @DeleteDateColumn({type:"timestamp with time zone",name:"op_deleted_at",nullable:true})
+    opDeletedAt?:Date;
 }

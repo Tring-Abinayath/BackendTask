@@ -5,11 +5,11 @@ import { QnBank } from "../../course_qnbank/entity/qn_bank.entity.ts";
 
 @Entity({name:"courses"})
 export class Courses{
-    @PrimaryGeneratedColumn("uuid")
-    c_id!:string;
+    @PrimaryGeneratedColumn("uuid",{name:"c_id"})
+    cId!:string;
 
-    @Column({type:"varchar",length:30})
-    c_name!:string;
+    @Column({type:"varchar",length:30,name:"c_name"})
+    cName!:string;
 
     @OneToMany(()=>CourseMaterial,(courseMaterial)=>courseMaterial.course)
     courseMaterials!:CourseMaterial[];
@@ -20,12 +20,12 @@ export class Courses{
     @OneToMany(()=>QnBank,(qnBank)=>qnBank.course)
     qnBank!:QnBank[]
 
-    @CreateDateColumn({type:"time with time zone",default:'NOW()'})
-    c_created_at!:Date;
+    @CreateDateColumn({type:"timestamp with time zone",name:"c_created_at"})
+    cCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"time with time zone",default:'NOW()'})
-    c_updated_at!:Date;
+    @UpdateDateColumn({type:"timestamp with time zone",name:"c_updated_at",default:'NOW()'})
+    cUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"time with time zone", nullable: true })
-    c_deleted_at?:Date;
+    @DeleteDateColumn({type:"timestamp with time zone",name:"c_deleted_at", nullable: true })
+    cDeletedAt?:Date;
 }
