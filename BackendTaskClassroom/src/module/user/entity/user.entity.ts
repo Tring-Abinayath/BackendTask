@@ -15,13 +15,8 @@ export class User {
   @Column({ type: "varchar", length: 50, unique: true, name:"u_email"})
   uEmail!: string;
 
-<<<<<<< HEAD
   @Column({ type: "varchar", length: 255 })
   u_password!: string;
-=======
-  @Column({ type: "varchar", length: 8, name:"u_password" })
-  uPassword!: string;
->>>>>>> aa8090d600bb45282c5489fbdbec1a2f1b7e9713
 
   @Column({
     type: "enum",
