@@ -1,23 +1,17 @@
-import { ILike, Repository } from "typeorm";
-import { Courses } from "./entity/courses.entity";
-import { postgresDataSource } from "../../db/dbConnect";
-import { addCourse, deleteCourse, updateCourses } from "./courses.services";
+import { addCourse, deleteCourse, getCourses, searchCourse, updateCourses } from "./courses.services";
 
 export type Context = {
     u_id: string;
     u_role: string;
 }
 
-const courseRepository: Repository<Courses> = postgresDataSource.getRepository(Courses);
-
 export const courseResolvers = {
     Query: {
-        getCourses: async () => {
-            return await courseRepository.find();
+        getCourses: () => {
+            return getCourses();
         },
         searchCourse:async(_:any,{c_name}:{c_name:string})=>{
-            const courses=await courseRepository.find({where:{c_name:ILike(`%${c_name}%`)}})
-            return courses
+            return searchCourse({c_name})
         }
     },
     Mutation: {

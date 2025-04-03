@@ -6,12 +6,14 @@ import { verifyJWT } from './src/utils/verifyJWT';
 import { courseTypeDefs } from './src/module/courses/courses.typedefs';
 import { courseResolvers } from './src/module/courses/courses.resolvers';
 import dotenv from 'dotenv';
+import { courseMaterialsTypedefs } from './src/module/courses/course_material.typedefs';
+import { courseMaterialResolvers } from './src/module/courses/course_material.resolvers';
 dotenv.config();
 console.log("Inside index.js file");
 
 const server=new ApolloServer({
-    typeDefs:[userTypeDefs,courseTypeDefs],
-    resolvers:[userResolvers,courseResolvers],
+    typeDefs:[userTypeDefs,courseTypeDefs,courseMaterialsTypedefs],
+    resolvers:[userResolvers,courseResolvers,courseMaterialResolvers],
     context:({req})=>{
         if(!req.headers.authorization){
             return null;

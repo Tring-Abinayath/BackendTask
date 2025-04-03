@@ -1,17 +1,13 @@
-import { Repository } from "typeorm";
-import { postgresDataSource } from "../../db/dbConnect";
-import { User } from "./entity/user.entity";
-import { signin, signup } from "./user.service";
-
-const userRepository: Repository<User> = postgresDataSource.getRepository(User);
+import { getCourses } from "../courses/courses.services";
+import { getUserById, getUsers, signin, signup } from "./user.service";
 
 export const userResolvers = {
     Query: {
-        getUsers: async () => {
-            return await userRepository.find();
+        getUsers: async() => {
+            return getUsers();
         },
         getUserById:async(_:any,{u_id}:{u_id:string})=>{
-            return await userRepository.findOne({where:{u_id}})
+            return getUserById({u_id})
         }
     },
     Mutation:{

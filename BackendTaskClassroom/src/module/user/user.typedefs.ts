@@ -8,11 +8,10 @@ export const userTypeDefs = gql`
   }
 
     type User {
-        u_id: String
-        u_email: String
-        u_password:String
-        u_role: UserRole
-        u_created_at:String
+        uId: String
+        uEmail: String
+        uPassword:String
+        uRole: UserRole
     }
     type Query {
         getUsers: [User]

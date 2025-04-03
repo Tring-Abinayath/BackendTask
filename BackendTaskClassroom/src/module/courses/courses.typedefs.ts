@@ -2,11 +2,8 @@ import { gql } from "apollo-server";
 
 export const courseTypeDefs=gql`
     type Course{
-        c_id:String
-        c_name:String
-        c_created_at:String
-        c_updated_at:String
-        c_deleted_at:String
+        cId:String
+        cName:String
     }
     type Query{
         getCourses:[Course]
