@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany, ManyToOne, OneToMany } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToMany, ManyToOne, OneToMany, BaseEntity } from "typeorm";
 import { StudentAssignment } from "../../student/entity/student_assignment.entity";
 import { StudentScore } from "../../student/entity/student_score.entity";
 
@@ -15,7 +15,7 @@ export class User {
   @Column({ type: "varchar", length: 50, unique: true, name:"u_email"})
   uEmail!: string;
 
-  @Column({ type: "varchar", length: 8, name:"u_password" })
+  @Column({ type: "varchar", length: 255,name:"u_password" })
   uPassword!: string;
 
   @Column({
@@ -35,7 +35,7 @@ export class User {
   @CreateDateColumn({ type: "timestamp with time zone",name:"u_created_at"})
   uCreatedAt!: Date;
 
-  @UpdateDateColumn({ type: "timestamp with time zone",name:"u_updated_at", default: "NOW()" })
+  @UpdateDateColumn({ type: "timestamp with time zone",name:"u_updated_at"})
   uUpdatedAt!: Date;
 
   @DeleteDateColumn({ type: "timestamp with time zone",name:"u_deleted_at", nullable: true })
