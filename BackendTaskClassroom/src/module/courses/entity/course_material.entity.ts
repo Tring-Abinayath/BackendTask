@@ -16,9 +16,9 @@ export class CourseMaterial{
     @CreateDateColumn({type:"timestamp with time zone",name:"c_mat_created_at"})
     cMatCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"c_mat_updated_at",default:"NOW()"})
+    @UpdateDateColumn({type:"timestamp with time zone",name:"c_mat_updated_at"})
     cMatUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"timestamp with time zone",name:"c_mat_updated_at", nullable: true })
+    @DeleteDateColumn({type:"timestamp with time zone",name:"c_mat_deleted_at", nullable: true })
     cMatDeletedAt?:Date;
 }

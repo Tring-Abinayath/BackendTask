@@ -7,40 +7,83 @@ import { Courses } from "./entity/courses.entity";
 
 const courseRepository: Repository<Courses> = postgresDataSource.getRepository(Courses)
 
-const courseMaterial:Repository<CourseMaterial>=postgresDataSource.getRepository(CourseMaterial)
+const courseMaterial: Repository<CourseMaterial> = postgresDataSource.getRepository(CourseMaterial)
 
-export const getCourseMaterial=async({c_id}:{c_id:string})=>{
-    try{
-        await isCourse({c_id})
+export const getCourseMaterial = async ({ c_id }: { c_id: string }) => {
+    try {
+        await isCourse({ c_id })
         const courseMaterials = await courseMaterial.find({
-            where: { 
-                course: { 
-                    cId: c_id 
-            } },
+            where: {
+                course: {
+                    cId: c_id
+                }
+            },
             relations: ["course"]
         });
 
-        console.log(courseMaterials);
-
         if (courseMaterials.length === 0) {
-            return { message: "No course materials found for this course" };
+            throw new Error("No course materials found for this course");
         }
-        return courseMaterials; 
-    }catch(err:any){
+
+        return courseMaterials.map(material => ({
+            cMatId: material.cMatId,
+            cMatUpload: material.cMatUpload,
+            cId: material.course.cId
+        }));
+
+
+    } catch (err: any) {
         throw new Error(err.message)
     }
 }
 
-export const addCourseMaterial=async({c_id,c_mat_upload}:{c_id:string,c_mat_upload:string},context:Context)=>{
-    try{
+export const addCourseMaterial = async ({ c_id, c_mat_upload }: { c_id: string, c_mat_upload: string }, context: Context) => {
+    try {
         await isAuthorized(context)
-        await isCourse({c_id})
-        const getCourse=await courseRepository.find({where:{cId:c_id}})
-        console.log("Getcourse:",getCourse)
-        const material=courseMaterial.create({cMatUpload:c_mat_upload})
-        console.log("Material:",material)
+        await isCourse({ c_id })
+        const getCourse = await courseRepository.find({ where: { cId: c_id } })
+        const material = courseMaterial.create({ cMatUpload: c_mat_upload, course: getCourse[0] })
         await courseMaterial.save(material)
         return "Course material added successfully"
+    } catch (err: any) {
+        throw new Error(err.message)
+    }
+}
+
+export const isMaterial=async({ c_mat_id, c_id}: { c_mat_id: string, c_id: string})=>{
+    const materials = await courseMaterial.findOne({
+        where: {
+            cMatId: c_mat_id,
+            course: {
+                cId: c_id
+            }
+        },
+        relations: ["course"]
+    });
+
+    if(!materials){
+        throw new Error("No materials found")
+    }
+}
+
+export const updateCourseMaterial = async ({ c_mat_id, c_id, c_mat_newUpload }: { c_mat_id: string, c_id: string, c_mat_newUpload: string }, context: Context) => {
+    try {
+        await isAuthorized(context)
+        await isMaterial({c_mat_id,c_id})
+        await courseMaterial.update({cMatId:c_mat_id},{cMatUpload:c_mat_newUpload})
+        return "Course material updated successfully"
+
+    } catch (err: any) {
+        throw new Error(err.message)
+    }
+}
+
+export const deleteCourseMaterial = async ({ c_mat_id,c_id }: { c_mat_id: string,c_id:string}, context: Context) => {
+    try{
+        await isAuthorized(context)
+        await isMaterial({c_mat_id,c_id})
+        await courseMaterial.softDelete({cMatId:c_mat_id})
+        return "Course material deleted successfully"
     }catch(err:any){
         throw new Error(err.message)
     }

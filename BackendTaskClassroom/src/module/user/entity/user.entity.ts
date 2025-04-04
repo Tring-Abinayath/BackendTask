@@ -35,7 +35,7 @@ export class User {
   @CreateDateColumn({ type: "timestamp with time zone",name:"u_created_at"})
   uCreatedAt!: Date;
 
-  @UpdateDateColumn({ type: "timestamp with time zone",name:"u_updated_at", default: "NOW()" })
+  @UpdateDateColumn({ type: "timestamp with time zone",name:"u_updated_at"})
   uUpdatedAt!: Date;
 
   @DeleteDateColumn({ type: "timestamp with time zone",name:"u_deleted_at", nullable: true })
