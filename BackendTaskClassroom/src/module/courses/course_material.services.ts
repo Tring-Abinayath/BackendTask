@@ -4,12 +4,13 @@ import { postgresDataSource } from "../../db/dbConnect";
 import { Context } from "./courses.resolvers";
 import { isAuthorized, isCourse } from "./courses.services";
 import { Courses } from "./entity/courses.entity";
+import { downloadFromS3 } from "../../s3/s3";
 
 const courseRepository: Repository<Courses> = postgresDataSource.getRepository(Courses)
 
 const courseMaterial: Repository<CourseMaterial> = postgresDataSource.getRepository(CourseMaterial)
 
-export const getCourseMaterial = async ({ c_id }: { c_id: string }) => {
+export const getCourseMaterial = async ({ c_id,bucket }: { c_id: string,bucket:string }) => {
     try {
         await isCourse({ c_id })
         const courseMaterials = await courseMaterial.find({
@@ -25,12 +26,17 @@ export const getCourseMaterial = async ({ c_id }: { c_id: string }) => {
             throw new Error("No course materials found for this course");
         }
 
-        return courseMaterials.map(material => ({
-            cMatId: material.cMatId,
-            cMatUpload: material.cMatUpload,
-            cId: material.course.cId
-        }));
+        const getMaterials=courseMaterials.map(async(material) => {
+            const signedUrl=await downloadFromS3(bucket,material.cMatUpload)
+            return {
+                cMatId: material.cMatId,
+                cMatUpload: material.cMatUpload,
+                cId: material.course.cId,
+                url:signedUrl
+            }
+            });
 
+        return getMaterials;
 
     } catch (err: any) {
         throw new Error(err.message)
@@ -42,7 +48,7 @@ export const addCourseMaterial = async ({ c_id, c_mat_upload }: { c_id: string, 
         await isAuthorized(context)
         await isCourse({ c_id })
         const getCourse = await courseRepository.find({ where: { cId: c_id } })
-        const material = courseMaterial.create({ cMatUpload: c_mat_upload, course: getCourse[0] })
+        const material = courseMaterial.create({ cMatUpload: "materials/"+c_mat_upload, course: getCourse[0] })
         await courseMaterial.save(material)
         return "Course material added successfully"
     } catch (err: any) {

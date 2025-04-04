@@ -3,8 +3,8 @@ import { Context } from "./courses.resolvers";
 
 export const courseMaterialResolvers={
     Query:{
-        getCourseMaterial:(_:any,{c_id}:{c_id:string})=>{
-            return getCourseMaterial({c_id})
+        getCourseMaterial:(_:any,{c_id,bucket}:{c_id:string,bucket:string})=>{
+            return getCourseMaterial({c_id,bucket})
         }
     },
     Mutation:{
