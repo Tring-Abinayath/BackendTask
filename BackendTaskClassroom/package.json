@@ -4,7 +4,7 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "npm run typeorm -- migration:run -d ./src/db/dbConnect.ts && ts-node ./index.ts",
+    "start": "npm run typeorm -- migration:run -d ./src/db/dbConnect.ts && nodemon --exec ts-node ./index.ts",
     "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
     "migration:generate": "npm run typeorm -- migration:generate -d ./src/db/dbConnect.ts",
     "migration:run": "npm run typeorm -- migration:run -d ./src/db/dbConnect.ts",

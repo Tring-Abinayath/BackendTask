@@ -2,13 +2,14 @@ import { ILike, Repository } from "typeorm";
 import { Courses } from "./entity/courses.entity";
 import { postgresDataSource } from "../../db/dbConnect";
 import { Context } from "./courses.resolvers";
+import { userRole } from "../user/entity/user.entity";
+import { updateCourseArgsType } from "./courses.types";
 
-const courseRepository: Repository<Courses> = postgresDataSource.getRepository(Courses)
+export const courseRepository: Repository<Courses> = postgresDataSource.getRepository(Courses)
 
 export const getCourses=async()=>{
     try{
-        const courses= await courseRepository.find()
-        return courses
+        return courseRepository.find()
     }catch(err:any){
         throw new Error(err.message)
     }
@@ -16,16 +17,14 @@ export const getCourses=async()=>{
 
 export const searchCourse=async({c_name}:{c_name:string})=>{
     try{
-        const course=await courseRepository.find({where:{cName:ILike(`%${c_name}%`)}})
-        return course
-
+        return courseRepository.find({where:{cName:ILike(`%${c_name}%`)}})
     }catch(err:any){
         throw new Error(err.message)
     }
 }
 
-export const isAuthorized = async (context: Context) => {
-    if (Object.keys(context).length === 0 || context.u_role !== 'admin') {
+export const isAuthorized = async (context: Context,authorizedRole:userRole[]) => {
+    if (Object.keys(context).length === 0 || !authorizedRole.includes(context.u_role as userRole)) {
         throw new Error("Unauthorized")
     }
 }
@@ -37,9 +36,8 @@ export const isCourse=async({c_id}:{c_id:string})=>{
     }
 }
 
-export const addCourse = async ({ c_name }: { c_name: string }, context: Context) => {
+export const addCourse = async ({ c_name }: { c_name: string }) => {
     try {
-        await isAuthorized(context)
         const course = courseRepository.create({ cName :c_name})
         await courseRepository.save(course)
         return "Course added successfully"
@@ -48,9 +46,9 @@ export const addCourse = async ({ c_name }: { c_name: string }, context: Context
     }
 }
 
-export const updateCourses = async ({ c_id, c_newName }: { c_id: string, c_newName: string }, context: Context) => {
+export const updateCourses = async (updateCourseArgs: updateCourseArgsType) => {
     try {
-        await isAuthorized(context)
+        const { c_id, c_newName }=updateCourseArgs
         await isCourse({c_id})
         await courseRepository.update({ cId:c_id }, { cName: c_newName })
         return "Course updated successfully"
@@ -59,9 +57,8 @@ export const updateCourses = async ({ c_id, c_newName }: { c_id: string, c_newNa
     }
 }
 
-export const deleteCourse = async({ c_id }: { c_id: string }, context:Context)=>{
+export const deleteCourse = async({ c_id }: { c_id: string })=>{
     try{
-        await isAuthorized(context)
         await isCourse({c_id})
         await courseRepository.softDelete({cId:c_id})
         return "Course deleted successfully"

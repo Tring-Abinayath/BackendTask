@@ -2,13 +2,13 @@ import { Repository } from "typeorm";
 import { User, userRole } from "./entity/user.entity";
 import { postgresDataSource } from "../../db/dbConnect";
 import bcrypt from 'bcryptjs'
-import jwt from 'jsonwebtoken'
+import jwt  from 'jsonwebtoken'
+import { userArgsType } from "./user.types";
 const userRepository: Repository<User> = postgresDataSource.getRepository(User);
 
 export const getUsers = async () => {
     try {
-        const users= await userRepository.find()
-        return users;
+       return userRepository.find()
     } catch (err: any) {
         throw new Error(err.message)
     }
@@ -16,7 +16,7 @@ export const getUsers = async () => {
 
 export const getUserById = async ({ u_id }: { u_id: string }) => {
     try {
-        return await userRepository.findOne({ where: { uId: u_id } })
+        return userRepository.findOne({ where: { uId: u_id } })
     } catch (err: any) {
         throw new Error(err.message)
     }
@@ -41,14 +41,14 @@ export const validEmailAndPassword = async (u_email: string, u_password: string)
     }
 }
 
-export const signup = async ({ createUser }: { createUser: { u_email: string, u_password: string, u_role: string } }) => {
-    const { u_email, u_password, u_role } = createUser
+export const signup = async ({ createUser }: { createUser:userArgsType }) => {
+    const { u_email, u_password } = createUser
+    const salt_rounds=parseInt(process.env.SALT_ROUNDS || '10');
     try {
         await existingUser(u_email)
         await validEmailAndPassword(u_email, u_password)
-        const hashedPassword = await bcrypt.hash(u_password, 10);
-        const role: userRole = u_role ? (u_role as userRole) : userRole.Student;
-        const newUser = userRepository.create({ uEmail: u_email, uPassword: hashedPassword, uRole: role });
+        const hashedPassword = await bcrypt.hash(u_password, salt_rounds);
+        const newUser = userRepository.create({ uEmail: u_email, uPassword: hashedPassword});
         await userRepository.save(newUser)
         return "User created successfully"
     } catch (err) {
@@ -56,7 +56,8 @@ export const signup = async ({ createUser }: { createUser: { u_email: string, u_
     }
 }
 
-export const isEmail = async ({ u_email, u_password }: { u_email: string, u_password: string }) => {
+export const isEmail = async (userArgs: userArgsType) => {
+    const { u_email, u_password }=userArgs
     const getUser = await userRepository.findOne({ where: { uEmail: u_email } })
     if (!getUser) {
         throw new Error("Incorrect email or password")
@@ -68,15 +69,17 @@ export const isEmail = async ({ u_email, u_password }: { u_email: string, u_pass
     return getUser
 }
 
-export const signin = async ({ u_email, u_password }: { u_email: string, u_password: string }) => {
+export const signin = async (userArgs: userArgsType) => {
+    const { u_email, u_password }=userArgs
     const jwt_key = process.env.JWT_KEY as string;
+    const jwt_expires=process.env.JWT_EXPIRES || '1h';
     try {
-        const getUser = await isEmail({ u_email, u_password })
+        const getUser = await isEmail(userArgs)
         const token = jwt.sign({
             u_id: getUser.uId,
             u_email: getUser.uEmail,
             u_role: getUser.uRole
-        }, jwt_key, { expiresIn: '1h' })
+        }, jwt_key, {expiresIn:parseInt(jwt_expires)})
         return { token }
     }
     catch (err) {

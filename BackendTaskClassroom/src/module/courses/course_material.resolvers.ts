@@ -1,21 +1,44 @@
+import { userRole } from "../user/entity/user.entity";
 import { addCourseMaterial, deleteCourseMaterial, getCourseMaterial, updateCourseMaterial } from "./course_material.services";
+import { addCourseMaterialArgsType, deleteCourseMaterialArgsType, getCourseMaterialArgsType, updateCourseMaterialArgsType } from "./course_material.types";
 import { Context } from "./courses.resolvers";
+import { isAuthorized } from "./courses.services";
 
-export const courseMaterialResolvers={
-    Query:{
-        getCourseMaterial:(_:any,{c_id,bucket}:{c_id:string,bucket:string})=>{
-            return getCourseMaterial({c_id,bucket})
+export const courseMaterialResolvers = {
+    Query: {
+        getCourseMaterial: async(_: any, getCourseMaterialArgs: getCourseMaterialArgsType ,context:Context) => {
+            try {
+                await isAuthorized(context, [userRole.Admin, userRole.Student])
+                return getCourseMaterial(getCourseMaterialArgs)
+            } catch (err: any) {
+                throw new Error(err.message)
+            }
         }
     },
-    Mutation:{
-        addCourseMaterial:(_:any,{c_id,c_mat_upload}:{c_id:string,c_mat_upload:string},context:Context)=>{
-            return addCourseMaterial({c_id,c_mat_upload},context)
+    Mutation: {
+        addCourseMaterial: async(_: any, addCourseMaterialArgs: addCourseMaterialArgsType, context: Context) => {
+            try {
+                await isAuthorized(context, [userRole.Admin])
+                return addCourseMaterial(addCourseMaterialArgs)
+            } catch (err: any) {
+                throw new Error(err.message)
+            }
         },
-        updateCourseMaterial:(_:any,{c_mat_id,c_id,c_mat_newUpload}:{c_mat_id:string,c_id:string,c_mat_newUpload:string},context:Context)=>{
-            return updateCourseMaterial({c_mat_id,c_id,c_mat_newUpload},context)
+        updateCourseMaterial:async (_: any,updateCourseMaterialArgs: updateCourseMaterialArgsType, context: Context) => {
+            try {
+                await isAuthorized(context, [userRole.Admin])
+                return updateCourseMaterial(updateCourseMaterialArgs)
+            } catch (err: any) {
+                throw new Error(err.message)
+            }
         },
-        deleteCourseMaterial:(_:any,{c_mat_id,c_id}:{c_mat_id:string,c_id:string},context:Context)=>{
-            return deleteCourseMaterial({c_mat_id,c_id},context)
+        deleteCourseMaterial: async(_: any, deleteCourseMaterialArgs: deleteCourseMaterialArgsType, context: Context) => {
+            try {
+                await isAuthorized(context, [userRole.Admin])
+                return deleteCourseMaterial(deleteCourseMaterialArgs)
+            } catch (err: any) {
+                throw new Error(err.message)
+            }
         }
     }
 }

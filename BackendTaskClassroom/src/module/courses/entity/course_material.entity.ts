@@ -13,6 +13,10 @@ export class CourseMaterial{
     @JoinColumn({name:"c_id"})
     course!: Courses
 
+    @Column({name:"c_id"})
+    courseId!:string;
+
+
     @CreateDateColumn({type:"timestamp with time zone",name:"c_mat_created_at"})
     cMatCreatedAt!:Date;
 

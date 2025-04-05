@@ -21,7 +21,6 @@ export const userTypeDefs = gql`
     input CreateUser{
         u_email:String!
         u_password:String!
-        u_role:UserRole
     }
 
     type Token{
