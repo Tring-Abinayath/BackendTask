@@ -4,11 +4,21 @@ import { postgresDataSource } from "../../db/dbConnect";
 import bcrypt from 'bcryptjs'
 import jwt  from 'jsonwebtoken'
 import { userArgsType } from "./user.types";
+import { getPaginationArgsInput } from "./user.resolvers";
 
 export const userRepository: Repository<User> = postgresDataSource.getRepository(User);
-export const getUsers = async () => {
+export const getUsers = async (getUserArgs:getPaginationArgsInput) => {
+    const page=getUserArgs.page?getUserArgs.page:1
+    const pageSize=getUserArgs.pageSize?getUserArgs.pageSize:10
+    const skip=(page-1)*pageSize
     try {
-       return userRepository.find({where:{uRole:"student" as userRole}})
+       return userRepository.find({
+        where:{
+            uRole:"student" as userRole
+        },
+        take:getUserArgs.pageSize,
+        skip  
+    })
     } catch (err: any) {
         throw new Error(err.message)
     }

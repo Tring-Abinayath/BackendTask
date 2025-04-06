@@ -1,7 +1,7 @@
 import { Entity,Column,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany } from "typeorm";
 import { CourseMaterial } from "./course_material.entity.ts";
 import { Assignment } from "../../course_assignment/entity/assignment.entity.ts";
-import { QnBank } from "../../course_qnbank/entity/qn_bank.entity.ts";
+import { QnBank } from "../../course_quiz/entity/qn_bank.entity.ts";
 
 @Entity({name:"courses"})
 export class Courses{

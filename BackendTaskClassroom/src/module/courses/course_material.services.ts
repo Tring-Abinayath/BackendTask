@@ -10,7 +10,7 @@ const courseMaterial: Repository<CourseMaterial> = postgresDataSource.getReposit
 export const getCourseMaterial = async (getCourseMaterialArgs: getCourseMaterialArgsType) => {
     try {
         const { c_id, bucket } = getCourseMaterialArgs
-        await isCourse({ c_id })
+        await isCourse(c_id)
         const courseMaterials = await courseMaterial.find({
             where: {
                 course: {
@@ -44,7 +44,7 @@ export const getCourseMaterial = async (getCourseMaterialArgs: getCourseMaterial
 export const addCourseMaterial = async (addCourseMaterialArgs: addCourseMaterialArgsType) => {
     try {
         const { c_id, c_mat_upload } = addCourseMaterialArgs
-        await isCourse({ c_id })
+        await isCourse( c_id )
         await courseRepository.find({ where: { cId: c_id } })
         const material = courseMaterial.create({ cMatUpload: "materials/" + c_mat_upload, courseId: c_id })
         await courseMaterial.save(material)

@@ -10,12 +10,16 @@ import { courseMaterialsTypedefs } from './src/module/courses/course_material.ty
 import { courseMaterialResolvers } from './src/module/courses/course_material.resolvers';
 import { s3TypeDefs } from './src/s3/s3.typedefs';
 import { s3Resolvers } from './src/s3/s3.resolvers';
+import { adminTypeDefs } from './src/admin/admin.typeDefs';
+import { adminResolvers } from './src/admin/admin.resolvers';
+import { quizTypedefs } from './src/module/course_quiz/quiz.typedefs';
+import { quizResolvers } from './src/module/course_quiz/quiz.resolvers';
 dotenv.config();
-console.log("Inside index.js file");
+console.log("Inside index.ts file");
 
 const server=new ApolloServer({
-    typeDefs:[userTypeDefs,courseTypeDefs,courseMaterialsTypedefs,s3TypeDefs],
-    resolvers:[userResolvers,courseResolvers,courseMaterialResolvers,s3Resolvers],
+    typeDefs:[userTypeDefs,courseTypeDefs,courseMaterialsTypedefs,s3TypeDefs,adminTypeDefs,quizTypedefs],
+    resolvers:[userResolvers,courseResolvers,courseMaterialResolvers,s3Resolvers,adminResolvers,quizResolvers],
     context:({req})=>{
         if(!req.headers.authorization){
             return null;

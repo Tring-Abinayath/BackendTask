@@ -4,12 +4,19 @@ import { postgresDataSource } from "../../db/dbConnect";
 import { Context } from "./courses.resolvers";
 import { userRole } from "../user/entity/user.entity";
 import { updateCourseArgsType } from "./courses.types";
+import { getPaginationArgsInput } from "../user/user.resolvers";
 
 export const courseRepository: Repository<Courses> = postgresDataSource.getRepository(Courses)
 
-export const getCourses=async()=>{
+export const getCourses=async(getUserArgs:getPaginationArgsInput)=>{
+    const page=getUserArgs.page?getUserArgs.page:1
+    const pageSize=getUserArgs.pageSize?getUserArgs.pageSize:10
+    const skip=(page-1)*pageSize
     try{
-        return courseRepository.find()
+        return courseRepository.find({
+            take:pageSize,
+            skip
+        })
     }catch(err:any){
         throw new Error(err.message)
     }
@@ -29,7 +36,7 @@ export const isAuthorized = async (context: Context,authorizedRole:userRole[]) =
     }
 }
 
-export const isCourse=async({c_id}:{c_id:string})=>{
+export const isCourse=async(c_id:string)=>{
     const course = await courseRepository.findOne({where:{cId:c_id}})
     if(!course){
         throw new Error("Course not exist")
@@ -49,7 +56,7 @@ export const addCourse = async ({ c_name }: { c_name: string }) => {
 export const updateCourses = async (updateCourseArgs: updateCourseArgsType) => {
     try {
         const { c_id, c_newName }=updateCourseArgs
-        await isCourse({c_id})
+        await isCourse(c_id)
         await courseRepository.update({ cId:c_id }, { cName: c_newName })
         return "Course updated successfully"
     } catch (err) {
@@ -57,9 +64,9 @@ export const updateCourses = async (updateCourseArgs: updateCourseArgsType) => {
     }
 }
 
-export const deleteCourse = async({ c_id }: { c_id: string })=>{
+export const deleteCourse = async( c_id : string )=>{
     try{
-        await isCourse({c_id})
+        await isCourse(c_id)
         await courseRepository.softDelete({cId:c_id})
         return "Course deleted successfully"
     }catch(err){

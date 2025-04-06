@@ -1,4 +1,5 @@
 import { userRole } from "../user/entity/user.entity";
+import { getPaginationArgsInput } from "../user/user.resolvers";
 import { addCourse, deleteCourse, getCourses, isAuthorized, searchCourse, updateCourses } from "./courses.services";
 import { updateCourseArgsType } from "./courses.types";
 
@@ -9,10 +10,10 @@ export type Context = {
 
 export const courseResolvers = {
     Query: {
-        getCourses: async(_:any,_args:any,context:Context) => {
+        getCourses: async(_:any,getCourseArgs:getPaginationArgsInput,context:Context) => {
             try{
                 await isAuthorized(context,[userRole.Admin,userRole.Student])
-                return getCourses();
+                return getCourses(getCourseArgs);
             }catch(err:any){
                 throw new Error(err.message)
             }
@@ -46,7 +47,7 @@ export const courseResolvers = {
         deleteCourse:async(_:any,{c_id}:{c_id:string},context:Context)=>{
             try{
                 await isAuthorized(context,[userRole.Admin])
-                return deleteCourse({c_id})
+                return deleteCourse(c_id)
             }catch(err:any){
                 throw new Error(err.message)
             }
