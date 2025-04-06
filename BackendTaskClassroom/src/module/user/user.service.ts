@@ -4,11 +4,11 @@ import { postgresDataSource } from "../../db/dbConnect";
 import bcrypt from 'bcryptjs'
 import jwt  from 'jsonwebtoken'
 import { userArgsType } from "./user.types";
-const userRepository: Repository<User> = postgresDataSource.getRepository(User);
 
+export const userRepository: Repository<User> = postgresDataSource.getRepository(User);
 export const getUsers = async () => {
     try {
-       return userRepository.find()
+       return userRepository.find({where:{uRole:"student" as userRole}})
     } catch (err: any) {
         throw new Error(err.message)
     }
