@@ -23,7 +23,7 @@ export class Courses{
     @CreateDateColumn({type:"timestamp with time zone",name:"c_created_at"})
     cCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"c_updated_at",default:'NOW()'})
+    @UpdateDateColumn({type:"timestamp with time zone",name:"c_updated_at"})
     cUpdatedAt!:Date;
 
     @DeleteDateColumn({type:"timestamp with time zone",name:"c_deleted_at", nullable: true })

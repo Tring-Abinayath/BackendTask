@@ -24,7 +24,7 @@ export class QnBank{
     @CreateDateColumn({type:"timestamp with time zone",name:"qb_created_at"})
     qbCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"qb_updated_at",default:"NOW()"})
+    @UpdateDateColumn({type:"timestamp with time zone",name:"qb_updated_at"})
     qbUpdatedAt!:Date;
 
     @DeleteDateColumn({type:"timestamp with time zone",name:"qb_deleted_at", nullable: true })

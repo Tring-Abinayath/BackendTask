@@ -16,7 +16,7 @@ export class Options{
     @CreateDateColumn({type:"timestamp with time zone",name:"op_created_at"})
     opCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"op_updated_at",default:"NOW()"})
+    @UpdateDateColumn({type:"timestamp with time zone",name:"op_updated_at"})
     opUpdatedAt!:Date;
 
     @DeleteDateColumn({type:"timestamp with time zone",name:"op_deleted_at",nullable:true})

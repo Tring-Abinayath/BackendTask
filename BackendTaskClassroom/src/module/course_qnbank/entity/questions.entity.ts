@@ -24,7 +24,7 @@ export class Questions{
     @CreateDateColumn({type:"timestamp with time zone",name:"qn_created_at"})
     qnCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"qn_updated_at",default:"NOW()"})
+    @UpdateDateColumn({type:"timestamp with time zone",name:"qn_updated_at"})
     qnUpdatedAt!:Date;
 
     @DeleteDateColumn({type:"timestamp with time zone",name:"qn_deleted_at", nullable: true })

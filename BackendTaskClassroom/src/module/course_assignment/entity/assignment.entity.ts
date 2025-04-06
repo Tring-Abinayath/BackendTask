@@ -23,7 +23,7 @@ export class Assignment{
     @CreateDateColumn({type:"timestamp with time zone",name:"a_created_at"})
     aCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"a_updated_at",default:"NOW()"})
+    @UpdateDateColumn({type:"timestamp with time zone",name:"a_updated_at"})
     aUpdatedAt!:Date;
 
     @DeleteDateColumn({type:"timestamp with time zone",name:"a_deleted_at",nullable: true })
