@@ -10,7 +10,6 @@ export const createAdmin = async () => {
             const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD as string, process.env.SALT_ROUNDS as string);
             const adminUser = userRepository.create({ uEmail: process.env.ADMIN_EMAIL, uPassword: hashedPassword, uRole: process.env.ADMIN_ROLE as userRole });
             await userRepository.save(adminUser)
-
         }
         return 'Admin Created Successfully'
     } catch (err: any) {

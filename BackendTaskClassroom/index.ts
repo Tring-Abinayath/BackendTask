@@ -5,7 +5,6 @@ import { userResolvers } from './src/module/user/user.resolvers';
 import { verifyJWT } from './src/utils/verifyJWT';
 import { courseTypeDefs } from './src/module/courses/courses.typedefs';
 import { courseResolvers } from './src/module/courses/courses.resolvers';
-import dotenv from 'dotenv';
 import { courseMaterialsTypedefs } from './src/module/courses/course_material.typedefs';
 import { courseMaterialResolvers } from './src/module/courses/course_material.resolvers';
 import { s3TypeDefs } from './src/s3/s3.typedefs';
@@ -14,12 +13,18 @@ import { adminTypeDefs } from './src/admin/admin.typeDefs';
 import { adminResolvers } from './src/admin/admin.resolvers';
 import { quizTypedefs } from './src/module/course_quiz/quiz.typedefs';
 import { quizResolvers } from './src/module/course_quiz/quiz.resolvers';
+import dotenv from 'dotenv';
+import { assignmentTypedefs } from './src/module/course_assignment/assignment.typedefs';
+import { assignmentResolvers } from './src/module/course_assignment/assignment.resolvers';
+import { studAssignmentTypedefs } from './src/module/student/student_assignment.typedefs';
+import { studAssignmentResolvers } from './src/module/student/student_assignment.resolvers';
+
 dotenv.config();
 console.log("Inside index.ts file");
 
 const server=new ApolloServer({
-    typeDefs:[userTypeDefs,courseTypeDefs,courseMaterialsTypedefs,s3TypeDefs,adminTypeDefs,quizTypedefs],
-    resolvers:[userResolvers,courseResolvers,courseMaterialResolvers,s3Resolvers,adminResolvers,quizResolvers],
+    typeDefs:[userTypeDefs,courseTypeDefs,courseMaterialsTypedefs,s3TypeDefs,adminTypeDefs,quizTypedefs,assignmentTypedefs,studAssignmentTypedefs],
+    resolvers:[userResolvers,courseResolvers,courseMaterialResolvers,s3Resolvers,adminResolvers,quizResolvers,assignmentResolvers,studAssignmentResolvers],
     context:({req})=>{
         if(!req.headers.authorization){
             return null;

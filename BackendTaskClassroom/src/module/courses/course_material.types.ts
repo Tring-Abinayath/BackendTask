@@ -1,6 +1,9 @@
 export type getCourseMaterialArgsType = {
     c_id: string, 
-    bucket: string
+    bucket: string,
+    pageSize:number,
+    page:number,
+    courseMaterialName:string
 }
 
 export type addCourseMaterialArgsType = {

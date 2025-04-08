@@ -11,11 +11,15 @@ export const courseRepository: Repository<Courses> = postgresDataSource.getRepos
 export const getCourses=async(getUserArgs:getPaginationArgsInput)=>{
     const page=getUserArgs.page?getUserArgs.page:1
     const pageSize=getUserArgs.pageSize?getUserArgs.pageSize:10
+    const searchCourse=getUserArgs.c_name?getUserArgs.c_name:""
     const skip=(page-1)*pageSize
     try{
         return courseRepository.find({
+            where:{
+                cName:ILike(`%${searchCourse}%`)
+            },
             take:pageSize,
-            skip
+            skip,
         })
     }catch(err:any){
         throw new Error(err.message)
@@ -45,7 +49,11 @@ export const isCourse=async(c_id:string)=>{
 
 export const addCourse = async ({ c_name }: { c_name: string }) => {
     try {
-        const course = courseRepository.create({ cName :c_name})
+        const isCourse=await courseRepository.find({where:{cName:c_name.toLowerCase()}})
+        if(isCourse){
+            throw new Error("Course already exist")
+        }
+        const course = courseRepository.create({ cName :c_name.toLowerCase()})
         await courseRepository.save(course)
         return "Course added successfully"
     } catch (err) {

@@ -10,12 +10,12 @@ export class Assignment{
     @Column({name:"a_qn"})
     aQn!:string;
 
-    @Column({name:"a_upload"})
-    aUpload!:string;
-
     @ManyToOne(()=>Courses,(course)=>course.assignment)
     @JoinColumn({name:"c_id"})
     course!:Courses
+
+    @Column({name:"c_id"})
+    courseId!:string;
 
     @OneToMany(()=>StudentAssignment,(studAssignment)=>studAssignment.assignment)
     studentAssignment!:StudentAssignment[]

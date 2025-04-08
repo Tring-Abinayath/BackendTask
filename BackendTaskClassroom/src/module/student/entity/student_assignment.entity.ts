@@ -13,10 +13,16 @@ export class StudentAssignment{
     @ManyToOne(()=>User,(user)=>user.assignment)
     @JoinColumn({name:"u_id"})
     student!:User;
+    
+    @Column({name:"u_id"})
+    userId!:string
 
     @ManyToOne(()=>Assignment,(assignment)=>assignment.studentAssignment)
     @JoinColumn({name:"a_id"})
     assignment!:Assignment;
+
+    @Column({name:"a_id"})
+    assignmentId!:string
 
     @CreateDateColumn({type:"timestamp with time zone",name:"sa_created_at"})
     saCreatedAt!:Date;

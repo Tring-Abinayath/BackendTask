@@ -7,7 +7,8 @@ import { userArgsType } from "./user.types";
 
 export type getPaginationArgsInput={
     pageSize:number,
-    page:number
+    page:number,
+    c_name:string
 }
 
 export const userResolvers = {
