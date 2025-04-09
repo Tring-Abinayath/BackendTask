@@ -14,7 +14,7 @@ export const userTypeDefs = gql`
         uRole: UserRole
     }
     type Query {
-        getUsers: [User]
+        getUsers(pageSize:Int,page:Int): [User]
         getUserById(u_id:String!):User
     }
 

@@ -8,7 +8,13 @@ export const courseMaterialsTypedefs=gql`
         url:String
     }
     type Query{
-        getCourseMaterial(c_id:String!,bucket:String!):[CourseMaterial]
+        getCourseMaterial(
+            c_id:String!,
+            bucket:String!,
+            pageSize:Int,
+            page:Int,
+            courseMaterialName:String
+        ):[CourseMaterial]
     }
     type Mutation{
         addCourseMaterial(c_mat_upload:String!,c_id:String!):String

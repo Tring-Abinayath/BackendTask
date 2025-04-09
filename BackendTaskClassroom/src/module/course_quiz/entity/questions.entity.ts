@@ -14,12 +14,17 @@ export class Questions{
     @JoinColumn({name:"qb_id"})
     qnBank!:QnBank;
 
+    @Column({name:"qb_id"})
+    qnBankId!:string;
+
     @OneToOne(()=>Options)
-    @JoinColumn({name:"answer"})
     answerOption!:Options;
 
-    @OneToMany(()=>Options,(option)=>option.question)
-    question!:Options[]
+    @Column({name:"answer"})
+    answer!:string;
+
+    @OneToMany(()=>Options,(option)=>option.question,{cascade:true})
+    option!:Options[]
 
     @CreateDateColumn({type:"timestamp with time zone",name:"qn_created_at"})
     qnCreatedAt!:Date;
