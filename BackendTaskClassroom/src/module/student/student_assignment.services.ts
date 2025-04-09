@@ -51,7 +51,6 @@ export const getStudentAssignment = async (studAssignmentArgs: studAssignmentArg
 export const uploadAssignment = async (studAssignmentArgs: studAssignmentArgsInput) => {
     try {
         await isAssignment(studAssignmentArgs.a_id)
-        console.log(studAssignmentArgs)
         const uploadAssignment = studentAssignmentRepository.create({
             userId: studAssignmentArgs.u_id,
             assignmentId: studAssignmentArgs.a_id,
