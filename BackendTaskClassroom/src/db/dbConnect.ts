@@ -11,6 +11,7 @@ export const postgresDataSource= new DataSource({
     database:process.env.DB_NAME,
     entities:["src/module/**/entity/*.entity.ts"],
     synchronize:false,
+    logging: true, 
     migrations:["src/db/migration/*.ts"]
 })
 

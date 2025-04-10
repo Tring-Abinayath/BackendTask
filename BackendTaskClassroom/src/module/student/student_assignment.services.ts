@@ -19,8 +19,8 @@ export const isStudentAssignment = async (getStudAssignmentArgs: studAssignmentA
 }
 
 export const getStudentAssignment = async (studAssignmentArgs: studAssignmentArgsInput) => {
-    const page = studAssignmentArgs.page ? studAssignmentArgs.page : 1
-    const pageSize = studAssignmentArgs.pageSize ? studAssignmentArgs.pageSize : 10
+    const page = studAssignmentArgs.page
+    const pageSize = studAssignmentArgs.pageSize
     const searchAssignment = studAssignmentArgs.saUpload ? studAssignmentArgs.saUpload : ""
     const skip = (page - 1) * pageSize
     try {

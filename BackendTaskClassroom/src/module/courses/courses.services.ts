@@ -9,9 +9,9 @@ import { getPaginationArgsInput } from "../user/user.resolvers";
 export const courseRepository: Repository<Courses> = postgresDataSource.getRepository(Courses)
 
 export const getCourses=async(getUserArgs:getPaginationArgsInput)=>{
-    const page=getUserArgs.page?getUserArgs.page:1
-    const pageSize=getUserArgs.pageSize?getUserArgs.pageSize:10
-    const searchCourse=getUserArgs.c_name?getUserArgs.c_name:""
+    const page=getUserArgs.page
+    const pageSize=getUserArgs.pageSize
+    const searchCourse=getUserArgs.c_name
     const skip=(page-1)*pageSize
     try{
         return courseRepository.find({

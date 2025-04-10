@@ -11,8 +11,8 @@ export const studAssignmentTypedefs = gql`
         getStudentAssignment(
             uId:String!,
             saUpload:String,
-            pageSize:Int,
-            page:Int
+            pageSize:Int=10,
+            page:Int=1
         ):[StudentAssignment]
     }
     type Mutation{

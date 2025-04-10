@@ -11,8 +11,8 @@ export const courseMaterialsTypedefs=gql`
         getCourseMaterial(
             c_id:String!,
             bucket:String!,
-            pageSize:Int,
-            page:Int,
+            pageSize:Int=10,
+            page:Int=1,
             courseMaterialName:String
         ):[CourseMaterial]
     }
