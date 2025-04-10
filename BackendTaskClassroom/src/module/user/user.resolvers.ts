@@ -1,15 +1,22 @@
+import { IntegerType } from "typeorm";
 import { Context } from "../courses/courses.resolvers";
 import { isAuthorized } from "../courses/courses.services";
 import { userRole } from "./entity/user.entity";
 import { getUserById, getUsers, signin, signup } from "./user.service";
 import { userArgsType } from "./user.types";
 
+export type getPaginationArgsInput={
+    pageSize:number,
+    page:number,
+    c_name:string
+}
+
 export const userResolvers = {
     Query: {
-        getUsers: async (_: any,_args:any,context:Context) => {
+        getUsers: async (_: any,getUserArgs:getPaginationArgsInput,context:Context) => {
             try {
                 await isAuthorized(context, [userRole.Admin, userRole.Student])
-                return getUsers();
+                return getUsers(getUserArgs);
             } catch (err: any) {
                 throw new Error(err.message)
             }

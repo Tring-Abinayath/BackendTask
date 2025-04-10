@@ -1,5 +1,5 @@
-import { uploadToS3 } from "./s3.ts";
-import { getPreSignedUrlArgsType } from "./s3.types.ts";
+import { uploadToS3 } from "./s3";
+import { getPreSignedUrlArgsType } from "./s3.types";
 
 export const s3Resolvers = {
     Query: {

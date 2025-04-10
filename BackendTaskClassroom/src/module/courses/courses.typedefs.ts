@@ -6,7 +6,7 @@ export const courseTypeDefs=gql`
         cName:String
     }
     type Query{
-        getCourses:[Course]
+        getCourses(pageSize:Int=10,page:Int=1,c_name:String):[Course]
         searchCourse(c_name:String!):[Course]
     }
     type Mutation{

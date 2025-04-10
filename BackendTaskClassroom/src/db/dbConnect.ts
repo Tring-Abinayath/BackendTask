@@ -11,6 +11,7 @@ export const postgresDataSource= new DataSource({
     database:process.env.DB_NAME,
     entities:["src/module/**/entity/*.entity.ts"],
     synchronize:false,
+    logging: true, 
     migrations:["src/db/migration/*.ts"]
 })
 
@@ -21,3 +22,4 @@ postgresDataSource.initialize()
 .catch((err)=>{
     console.log("Error during dataSource initialization",err)
 })
+

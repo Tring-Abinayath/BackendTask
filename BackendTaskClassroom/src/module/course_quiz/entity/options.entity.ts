@@ -9,9 +9,12 @@ export class Options{
     @Column({name:"option"})
     option!:string;
 
-    @ManyToOne(()=>Questions,(question)=>question.question)
+    @ManyToOne(()=>Questions,(question)=>question.option)
     @JoinColumn({name:"qn_id"})
     question!:Questions;
+
+    @Column({name:"qn_id"})
+    questionId!:string;
 
     @CreateDateColumn({type:"timestamp with time zone",name:"op_created_at"})
     opCreatedAt!:Date;
