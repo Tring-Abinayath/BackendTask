@@ -1,13 +1,23 @@
 import { gql } from "apollo-server";
 
 export const quizTypedefs = gql`
+    input UpdateQuestionInput{
+        qn_id:String!
+        qn_name:String!
+        options:[UpdateOptionsInput!]!
+    }
+    input UpdateOptionsInput{
+        op_id:String!
+        option:String!
+        is_answer:Boolean
+    }
     input CreateQuestionInput{
         qn_name:String!
         options:[CreateOptionsInput!]!
     }
     input CreateOptionsInput{
         option:String!
-        is_answer:Boolean!
+        is_answer:Boolean
     }
     type Score {
         qb_id:String
@@ -45,7 +55,7 @@ export const quizTypedefs = gql`
             qb_id:String!,
             c_id:String!,
             qb_name:String!,
-            questions:[CreateQuestionInput!]!,
+            questions:[UpdateQuestionInput!]!,
         ):String
         submitQuiz(
             qb_id:String!,

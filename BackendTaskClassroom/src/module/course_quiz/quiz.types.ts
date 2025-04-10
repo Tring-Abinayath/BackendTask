@@ -7,6 +7,18 @@ type CreateOptionsInput = {
     is_answer: boolean
 }
 
+
+type UpdateQuestionInput = {
+    qn_id:string,
+    qn_name: string,
+    options: UpdateOptionsInput[]
+}
+type UpdateOptionsInput = {
+    op_id:string,
+    option: string,
+    is_answer: boolean
+}
+
 export type quizArgsTypes = {
     c_id: string,
     qb_name: string,
@@ -17,7 +29,7 @@ export type quizUpdateArgsTypes = {
     qb_id:string,
     c_id: string,
     qb_name: string,
-    questions: CreateQuestionInput[]
+    questions: UpdateQuestionInput[]
 }
 type QnAnsType = {
     qnId: string,

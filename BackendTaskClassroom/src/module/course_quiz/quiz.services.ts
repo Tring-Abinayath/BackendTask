@@ -10,46 +10,46 @@ const optionRepository: Repository<Options> = postgresDataSource.getRepository(O
 const qnBankRepository: Repository<QnBank> = postgresDataSource.getRepository(QnBank)
 export const studentScoreRepository: Repository<StudentScore> = postgresDataSource.getRepository(StudentScore)
 
-export const getQuiz=async(getQuizArgs:getQuizArgsInput)=>{
-    const pageSize=getQuizArgs.pageSize?getQuizArgs.pageSize:10
-    const page=getQuizArgs.page?getQuizArgs.page:1
-    const skip=(page-1)*pageSize
-    const searchQb=getQuizArgs.searchQb?getQuizArgs.searchQb:""
-    try{
-        const qn_bank=await qnBankRepository.find({
-            where:{
-                courseId:getQuizArgs.c_id,
-                qbName:ILike(`%${searchQb}%`)
+export const getQuiz = async (getQuizArgs: getQuizArgsInput) => {
+    const pageSize = getQuizArgs.pageSize ? getQuizArgs.pageSize : 10
+    const page = getQuizArgs.page ? getQuizArgs.page : 1
+    const skip = (page - 1) * pageSize
+    const searchQb = getQuizArgs.searchQb ? getQuizArgs.searchQb : ""
+    try {
+        const qn_bank = await qnBankRepository.find({
+            where: {
+                courseId: getQuizArgs.c_id,
+                qbName: ILike(`%${searchQb}%`)
             },
-            relations:["question","question.option"],
-            take:pageSize,
+            relations: ["question", "question.option"],
+            take: pageSize,
             skip
         });
 
-        const quiz=qn_bank.map(qb=>{
-            return{
-                qb_id:qb.qbId,
-                qb_name:qb.qbName,
-                questions:qb.question
-                .filter(qn=>qn.answer)
-                .map(qn=>{
-                    return {
-                        qn_id:qn.qnId,
-                        qn:qn.qn,
-                        options:qn.option.map(option=>{
-                            return {
-                                op_id:option.opId,
-                                option:option.option
-                            }
-                        })
-                    }
-                }),
+        const quiz = qn_bank.map(qb => {
+            return {
+                qb_id: qb.qbId,
+                qb_name: qb.qbName,
+                questions: qb.question
+                    .filter(qn => qn.answer)
+                    .map(qn => {
+                        return {
+                            qn_id: qn.qnId,
+                            qn: qn.qn,
+                            options: qn.option.map(option => {
+                                return {
+                                    op_id: option.opId,
+                                    option: option.option
+                                }
+                            })
+                        }
+                    }),
             }
         })
         return quiz
-        
-    }catch(err:any){
-            throw new Error(err.message)
+
+    } catch (err: any) {
+        throw new Error(err.message)
     }
 }
 
@@ -69,7 +69,7 @@ export const addQuiz = async (quizArgs: quizArgsTypes) => {
             throw new Error("Quiz already exist")
         }
 
-        console.log("Given updated quiz:",JSON.stringify(  quizArgs))
+        console.log("Given updated quiz:", JSON.stringify(quizArgs))
 
         const questions = quizArgs.questions.map(quizArgs => {
             return {
@@ -93,6 +93,9 @@ export const addQuiz = async (quizArgs: quizArgsTypes) => {
 
         const answers = quizArgs.questions.map((args: any) => {
             const options = args.options.filter((option: any) => option.is_answer === true)
+            if(options.length===0){
+                throw new Error("Please provide answer for all the questions")
+            }
             return {
                 question: args.qn_name,
                 answer: options.map((option: any) => option.option)[0]
@@ -100,7 +103,7 @@ export const addQuiz = async (quizArgs: quizArgsTypes) => {
 
         })
 
-        const updateQnTable = answers.map(async (answer) => {
+        answers.forEach(async(answer:any) => {
             const result = await optionRepository.find({ where: { option: answer.answer } })
             result.forEach(async (optionEntity) => {
                 await qnRepository.update(
@@ -130,36 +133,61 @@ export const updateQuiz = async (quizUpdateArgs: quizUpdateArgsTypes) => {
             where: {
                 qbId: quizUpdateArgs.qb_id
             },
-            relations:["question"]
+            relations: ["question"]
         })
 
         if (!qb) {
             throw new Error("Quiz not exist")
         }
 
-        console.log("Given updated quiz:",JSON.stringify(  quizUpdateArgs))
+        console.log("Given updated quiz:", JSON.stringify(quizUpdateArgs))
 
         const questions = quizUpdateArgs.questions.map(quizArgsqn => {
             return {
+                qn_id: quizArgsqn.qn_id,
                 qn: quizArgsqn.qn_name,
                 option: quizArgsqn.options.map(op => {
                     return {
+                        op_id: op.op_id,
                         option: op.option
                     }
                 })
             }
         })
-        console.log("new QbName:",quizUpdateArgs.qb_name)
-        console.log("Updated Questions:",questions)
+        console.log("new QbName:", quizUpdateArgs.qb_name)
+        console.log("Updated Questions:", questions)
 
-        await quizRepository.update({qbId:quizUpdateArgs.qb_id},{
+        await quizRepository.update({ qbId: quizUpdateArgs.qb_id }, {
             courseId: quizUpdateArgs.c_id,
             qbName: quizUpdateArgs.qb_name.toLowerCase(),
-            question: questions
+        })
+
+        const updatedQuestions = await Promise.all(quizUpdateArgs.questions.map(async quizArgsqn => {
+            const updatedQuestion = await qnRepository.update(
+                { qnId: quizArgsqn.qn_id },
+                {
+                    qn: quizArgsqn.qn_name,
+                }
+            );
+            return updatedQuestion;
+        }));
+
+        quizUpdateArgs.questions.forEach(async qn => {
+            qn.options.forEach(async op => {
+                await optionRepository.update(
+                    {opId: op.op_id},
+                    {
+                        option:op.option
+                    }
+                )
+            })
         })
 
         const answers = quizUpdateArgs.questions.map((args: any) => {
             const options = args.options.filter((option: any) => option.is_answer === true)
+            if(options.length===0){
+                throw new Error("Please provide answer for all the questions")
+            }
             return {
                 question: args.qn_name,
                 answer: options.map((option: any) => option.option)[0]
@@ -167,7 +195,7 @@ export const updateQuiz = async (quizUpdateArgs: quizUpdateArgsTypes) => {
 
         })
 
-        const updateQnTable = answers.map(async (answer) => {
+        answers.forEach(async (answer) => {
             const result = await optionRepository.find({ where: { option: answer.answer } });
             for (const optionEntity of result) {
                 await qnRepository.update(
@@ -177,7 +205,7 @@ export const updateQuiz = async (quizUpdateArgs: quizUpdateArgsTypes) => {
             }
         });
 
-        console.log("Final:",await qnBankRepository.find())
+        console.log("Final:", await qnBankRepository.find())
         await queryRunner.commitTransaction()
         return "Quiz updated successfully"
     } catch (err: any) {
@@ -220,12 +248,13 @@ export const submitQuiz = async (submitQuizArgs: submitQuizArgsType, u_id: strin
     }
 }
 
-export const deleteQuiz = async ( qb_id : string ) => {
+export const deleteQuiz = async (qb_id: string) => {
     try {
         const qb = await qnBankRepository.findOne({
             where: {
                 qbId: qb_id
             },
+            relations:['question','question.option']
         })
         if (!qb) {
             throw new Error("Quiz not found")
@@ -239,7 +268,18 @@ export const deleteQuiz = async ( qb_id : string ) => {
         if (scoreQb) {
             throw new Error("Quiz already taken by a user, cannot delete")
         }
+
+         for (const question of qb.question) {
+            if (question.option && question.option.length > 0) {
+                await optionRepository.softDelete({ questionId: question.qnId });
+            }
+        }
+
+        for (const question of qb.question) {
+            await qnRepository.softDelete({ qnId: question.qnId });
+        }
         await qnBankRepository.softDelete({ qbId: qb_id })
+        
         return "Quiz deleted successfully"
     } catch (err: any) {
         throw new Error(err.message)
