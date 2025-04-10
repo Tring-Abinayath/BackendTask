@@ -2,35 +2,35 @@ import { gql } from "apollo-server";
 
 export const studAssignmentTypedefs = gql`
     type StudentAssignment{
-        sa_id:String
-        a_id:String
-        u_id:String
-        sa_upload:String
+        saId:String
+        assignmentId:String
+        userId:String
+        saUpload:String
     }
     type Query{
         getStudentAssignment(
-            u_id:String!,
-            sa_upload:String,
+            uId:String!,
+            saUpload:String,
             pageSize:Int,
             page:Int
         ):[StudentAssignment]
     }
     type Mutation{
         uploadAssignment(
-            a_id:String!,
-            u_id:String!,
-            sa_upload:String!
+            assignmentId:String!,
+            userId:String!,
+            saUpload:String!
         ):String
         updateStudentAssignment(
-            sa_id:String!,
-            a_id:String!,
-            u_id:String!,
-            sa_uploadNew:String!
+            saId:String!,
+            assignmentId:String!,
+            userId:String!,
+            saUploadNew:String!
         ):String
         deleteStudentAssignment(
-            sa_id:String!,
-            a_id:String!,
-            u_id:String!        
+            saId:String!,
+            assignmentId:String!,
+            userId:String!        
         ):String
     }
 `;
