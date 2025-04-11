@@ -1,4 +1,4 @@
-import { Entity,Column,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, ManyToMany, ManyToOne, JoinTable, JoinColumn } from "typeorm";
+import { Entity,Column,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Courses } from "./courses.entity";
 
 @Entity({name:"course_material"})
