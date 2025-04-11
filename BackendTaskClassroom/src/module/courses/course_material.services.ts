@@ -32,16 +32,15 @@ export const getCourseMaterial = async (getCourseMaterialArgs: getCourseMaterial
             throw new Error("No course materials found for this course");
         }
 
-        const getMaterials = courseMaterials.map(async (material) => {
+        return courseMaterials.map(async (material) => {
             const signedUrl = await downloadFromS3(bucket, material.cMatUpload)
             return {
                 cMatId: material.cMatId,
                 cMatUpload: material.cMatUpload,
                 cId: material.course.cId,
-                url: signedUrl.url
+                url: signedUrl
             }
         });
-        return getMaterials;
 
     } catch (err: any) {
         throw new Error(err.message)

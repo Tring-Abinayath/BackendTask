@@ -12,7 +12,7 @@ export const getUsers = async (getUserArgs:getPaginationArgsInput) => {
     const pageSize=getUserArgs.pageSize?getUserArgs.pageSize:10
     const skip=(page-1)*pageSize
     try {
-       return userRepository.find({
+       return await userRepository.find({
         where:{
             uRole:"student" as userRole
         },
@@ -26,42 +26,42 @@ export const getUsers = async (getUserArgs:getPaginationArgsInput) => {
 
 export const getUserById = async ({ u_id }: { u_id: string }) => {
     try {
-        return userRepository.findOne({ where: { uId: u_id } })
+        return await userRepository.findOne({ where: { uId: u_id } })
     } catch (err: any) {
         throw new Error(err.message)
     }
 }
 
-export const existingUser = async (u_email: string) => {
-    const existUser = await userRepository.findOne({ where: { uEmail: u_email } })
+export const existingUser = async (uEmail: string) => {
+    const existUser = await userRepository.findOne({ where: { uEmail } })
     if (existUser) {
         throw new Error("User already exist")
     }
-    return;
 }
 
-export const validEmailAndPassword = async (u_email: string, u_password: string) => {
+export const validEmailAndPassword = async (uEmail: string, uPassword: string) => {
     const emailFormat = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$/;
-    if (!emailFormat.test(u_email)) {
+    if (!emailFormat.test(uEmail)) {
         throw new Error("Invalid Email")
     }
     const passwordFormat = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#$%^&*?]).{8,}$/;
-    if (!passwordFormat.test(u_password)) {
+    if (!passwordFormat.test(uPassword)) {
         throw new Error("Required strong password")
     }
 }
 
 export const signup = async ({ createUser }: { createUser:userArgsType }) => {
     const { u_email, u_password } = createUser
-    const salt_rounds=parseInt(process.env.SALT_ROUNDS || '10');
+    const saltRounds=parseInt(process.env.SALT_ROUNDS || '10');
     try {
         await existingUser(u_email)
         await validEmailAndPassword(u_email, u_password)
-        const hashedPassword = await bcrypt.hash(u_password, salt_rounds);
+        const hashedPassword = await bcrypt.hash(u_password, saltRounds);
         const newUser = userRepository.create({ uEmail: u_email, uPassword: hashedPassword});
         await userRepository.save(newUser)
         return "User created successfully"
-    } catch (err) {
+    } catch (err:any) {
+        console.log(err.message)
         throw err
     }
 }
@@ -80,19 +80,18 @@ export const isEmail = async (userArgs: userArgsType) => {
 }
 
 export const signin = async (userArgs: userArgsType) => {
-    const { u_email, u_password }=userArgs
-    const jwt_key = process.env.JWT_KEY as string;
-    const jwt_expires=process.env.JWT_EXPIRES || '1h';
+    const jwtKey = process.env.JWT_KEY as string;
+    const jwtExpires=process.env.JWT_EXPIRES || '1h';
     try {
         const getUser = await isEmail(userArgs)
         const token = jwt.sign({
             u_id: getUser.uId,
             u_email: getUser.uEmail,
             u_role: getUser.uRole
-        }, jwt_key, {expiresIn:parseInt(jwt_expires)})
+        }, jwtKey, {expiresIn:parseInt(jwtExpires)})
         return { token }
     }
-    catch (err) {
+    catch (err:any) {
         throw err
     }
 }

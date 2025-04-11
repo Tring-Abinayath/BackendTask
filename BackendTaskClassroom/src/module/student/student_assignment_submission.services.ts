@@ -16,7 +16,7 @@ export const getStudAssignmentSubmit=async()=>{
         return result.map((row: any) => ({
             u_id: row.u_id,
             a_id: row.a_id,
-            submitted: row.sa_upload ? true : false // You can decide whether to map it as true/false based on the value of saUpload
+            submitted: row.sa_upload ? true : false 
           }));
           
     }catch(err:any){

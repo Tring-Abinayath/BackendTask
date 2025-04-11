@@ -13,10 +13,9 @@ export const uploadToS3=async(bucket:string,key:string)=>{
         Key:key
     })
     try{
-        const url=await getSignedUrl(s3,command,{
+        return await getSignedUrl(s3,command,{
             expiresIn:  parseInt(presignedurlExpires)
         })
-        return url
     }catch(err:any){
         throw new Error(err.message)
     }
@@ -28,8 +27,7 @@ export const downloadFromS3=async(bucket:string,key:string)=>{
         Key:key
     })
     try{
-        const url=await getSignedUrl(s3,command,{expiresIn:parseInt(presignedurlExpires)})
-        return {url}
+        return await getSignedUrl(s3,command,{expiresIn:parseInt(presignedurlExpires)})
     }catch(err:any){
         throw new Error(err.message)
     }

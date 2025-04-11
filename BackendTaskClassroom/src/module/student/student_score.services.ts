@@ -1,15 +1,15 @@
 import { studentScoreRepository } from "../course_quiz/quiz.services"
 import { userRepository } from "../user/user.service"
 
-export const getStudentScore=async(u_id:string)=>{
+export const getStudentScore=async(uId:string)=>{
     try{
-        const isUser=await userRepository.find({where:{uId:u_id}})
+        const isUser=await userRepository.find({where:{uId}})
         if(!isUser){
             throw new Error("User not found")
         }
         const getScore=await studentScoreRepository.find({
             where:{
-                userId:u_id,
+                userId:uId,
             }
         })
         return getScore.map(score=>({

@@ -7,17 +7,17 @@ import { studentAssignmentRepository } from "../student/student_assignment.servi
 
 const assignmentRepository: Repository<Assignment> = postgresDataSource.getRepository(Assignment)
 
-export const isAssignment = async (a_id: string) => {
-    const assignment=await assignmentRepository.findOne({where:{aId:a_id}})
+export const isAssignment = async (aId: string) => {
+    const assignment=await assignmentRepository.findOne({where:{aId}})
     if(!assignment){
         throw new Error("Assignment not found")
     }
 }
 
-export const isAssignmentTakenByStudent=async(a_id:string)=>{
+export const isAssignmentTakenByStudent=async(aId:string)=>{
     const isStudentTakeAssignment=await studentAssignmentRepository.findOne({
         where:{
-            assignmentId:a_id
+            assignmentId:aId
         }   
     })
     if(isStudentTakeAssignment){
@@ -25,12 +25,12 @@ export const isAssignmentTakenByStudent=async(a_id:string)=>{
     }
 }
 
-export const getAssignment = async (c_id: string) => {
+export const getAssignment = async (cId: string) => {
     try {
-        await isCourse(c_id)
+        await isCourse(cId)
         const assignments = await assignmentRepository.find({
             where: {
-                courseId: c_id
+                courseId: cId
             }
         })
         return assignments.map(assignment => ({
@@ -86,7 +86,7 @@ export const deleteAssignment = async (assignmentArgs: assignmentArgsType) => {
         await isCourse(assignmentArgs.c_id)
         await isAssignment(assignmentArgs.a_id)
         await isAssignmentTakenByStudent(assignmentArgs.a_id)
-        // await assignmentRepository.softDelete({ aId: assignmentArgs.a_id, courseId: assignmentArgs.c_id })
+        await assignmentRepository.softDelete({ aId: assignmentArgs.a_id, courseId: assignmentArgs.c_id })
         return "Assignment deleted successfully"
     } catch (err: any) {
         throw new Error(err.message)

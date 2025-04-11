@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, JoinColumn, ManyToOne, Unique } from "typeorm";
 import { QnBank } from "../../course_quiz/entity/qn_bank.entity";
 import { User } from "../../user/entity/user.entity";
+import { dateType } from "../../entityDateType";
 
 @Entity({ name: "student_score" })
 @Unique(['qbId','userId'])
@@ -16,21 +17,21 @@ export class StudentScore {
     qnBank!: QnBank;
 
     @Column({name:"qb_id"})
-    qbId!:String
+    qbId!:string
 
     @ManyToOne(() => User, (user) => user.scores)
     @JoinColumn({ name: "u_id" })
     userScore!: User;
 
     @Column({name:"u_id"})
-    userId!:String
+    userId!:string
 
-    @CreateDateColumn({ type: "timestamp with time zone",name:"sc_created_at"})
+    @CreateDateColumn({ type:dateType,name:"sc_created_at"})
     scCreatedAt!: Date;
 
-    @UpdateDateColumn({ type: "timestamp with time zone",name:"sc_updated_at", default: "NOW()" })
+    @UpdateDateColumn({ type:dateType,name:"sc_updated_at", default: "NOW()" })
     scUpdatedAt!: Date;
 
-    @DeleteDateColumn({ type: "timestamp with time zone",name:"sc_deleted_at", nullable: true })
+    @DeleteDateColumn({ type:dateType,name:"sc_deleted_at", nullable: true })
     scDeletedAt?: Date;
 }

@@ -1,6 +1,7 @@
 import { Entity,Column,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany, JoinColumn, ManyToOne, OneToOne } from "typeorm";
 import { QnBank } from "./qn_bank.entity";
 import { Options } from "./options.entity";
+import { dateType } from "../../entityDateType";
 
 @Entity({name:"questions"})
 export class Questions{
@@ -26,12 +27,12 @@ export class Questions{
     @OneToMany(()=>Options,(option)=>option.question,{cascade:true})
     option!:Options[]
 
-    @CreateDateColumn({type:"timestamp with time zone",name:"qn_created_at"})
+    @CreateDateColumn({type:dateType,name:"qn_created_at"})
     qnCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"qn_updated_at"})
+    @UpdateDateColumn({type:dateType,name:"qn_updated_at"})
     qnUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"timestamp with time zone",name:"qn_deleted_at", nullable: true })
+    @DeleteDateColumn({type:dateType,name:"qn_deleted_at", nullable: true })
     qnDeletedAt?:Date;
 }

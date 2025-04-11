@@ -14,4 +14,4 @@ export const courseTypeDefs=gql`
         updateCourse(c_id:String!,c_newName:String!):String
         deleteCourse(c_id:String!):String
     }
-`
+`;

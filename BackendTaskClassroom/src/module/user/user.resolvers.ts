@@ -1,4 +1,3 @@
-import { IntegerType } from "typeorm";
 import { Context } from "../courses/courses.resolvers";
 import { isAuthorized } from "../courses/courses.services";
 import { userRole } from "./entity/user.entity";

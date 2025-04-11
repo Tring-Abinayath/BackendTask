@@ -2,6 +2,7 @@ import { Entity,Column,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColum
 import { CourseMaterial } from "./course_material.entity";
 import { Assignment } from "../../course_assignment/entity/assignment.entity";
 import { QnBank } from "../../course_quiz/entity/qn_bank.entity";
+import { dateType } from "../../entityDateType";
 
 @Entity({name:"courses"})
 export class Courses{
@@ -20,12 +21,12 @@ export class Courses{
     @OneToMany(()=>QnBank,(qnBank)=>qnBank.course)
     qnBank!:QnBank[]
 
-    @CreateDateColumn({type:"timestamp with time zone",name:"c_created_at"})
+    @CreateDateColumn({type:dateType,name:"c_created_at"})
     cCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"c_updated_at"})
+    @UpdateDateColumn({type:dateType,name:"c_updated_at"})
     cUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"timestamp with time zone",name:"c_deleted_at", nullable: true })
+    @DeleteDateColumn({type:dateType,name:"c_deleted_at", nullable: true })
     cDeletedAt?:Date;
 }

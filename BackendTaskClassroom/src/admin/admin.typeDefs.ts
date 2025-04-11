@@ -4,5 +4,4 @@ export const adminTypeDefs = gql`
     type Mutation {
         createAdmin:String
     }
-
 `;

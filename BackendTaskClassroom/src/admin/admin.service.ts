@@ -15,5 +15,4 @@ export const createAdmin = async () => {
     } catch (err: any) {
         throw new Error(err.message)
     }
-
 }

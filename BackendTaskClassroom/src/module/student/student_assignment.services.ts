@@ -51,12 +51,12 @@ export const getStudentAssignment = async (studAssignmentArgs: studAssignmentArg
 export const uploadAssignment = async (studAssignmentArgs: studAssignmentArgsInput) => {
     try {
         await isAssignment(studAssignmentArgs.a_id)
-        const uploadAssignment = studentAssignmentRepository.create({
+        const uploadAss = studentAssignmentRepository.create({
             userId: studAssignmentArgs.u_id,
             assignmentId: studAssignmentArgs.a_id,
             saUpload: "studentAssignments/" + studAssignmentArgs.sa_upload
         })
-        await studentAssignmentRepository.save(uploadAssignment)
+        await studentAssignmentRepository.save(uploadAss)
         return "Assignment uploaded successfully"
     } catch (err: any) {
         throw new Error(err.message)

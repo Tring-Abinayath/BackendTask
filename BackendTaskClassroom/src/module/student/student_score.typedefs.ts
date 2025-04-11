@@ -9,4 +9,4 @@ export const studScoreTypedefs=gql`
     type Query{
         getStudentScore(u_id:String!):[StudentScore]
     }
-`
+`;

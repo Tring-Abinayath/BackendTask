@@ -30,5 +30,4 @@ export const userTypeDefs = gql`
         signup(createUser:CreateUser!):String
         signin(u_email:String!,u_password:String!):Token
     }
-
-`
+`;

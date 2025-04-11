@@ -1,5 +1,6 @@
 import { Entity,Column,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Questions } from "./questions.entity";
+import { dateType } from "../../entityDateType";
 
 @Entity({name:"options"})
 export class Options{
@@ -16,12 +17,12 @@ export class Options{
     @Column({name:"qn_id"})
     questionId!:string;
 
-    @CreateDateColumn({type:"timestamp with time zone",name:"op_created_at"})
+    @CreateDateColumn({type:dateType,name:"op_created_at"})
     opCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"op_updated_at"})
+    @UpdateDateColumn({type:dateType,name:"op_updated_at"})
     opUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"timestamp with time zone",name:"op_deleted_at",nullable:true})
+    @DeleteDateColumn({type:dateType,name:"op_deleted_at",nullable:true})
     opDeletedAt?:Date;
 }

@@ -1,5 +1,6 @@
 import { Entity,Column,PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ManyToOne, JoinColumn } from "typeorm";
 import { Courses } from "./courses.entity";
+import { dateType } from "../../entityDateType";
 
 @Entity({name:"course_material"})
 export class CourseMaterial{
@@ -17,12 +18,12 @@ export class CourseMaterial{
     courseId!:string;
 
 
-    @CreateDateColumn({type:"timestamp with time zone",name:"c_mat_created_at"})
+    @CreateDateColumn({type:dateType,name:"c_mat_created_at"})
     cMatCreatedAt!:Date;
 
-    @UpdateDateColumn({type:"timestamp with time zone",name:"c_mat_updated_at"})
+    @UpdateDateColumn({type:dateType,name:"c_mat_updated_at"})
     cMatUpdatedAt!:Date;
 
-    @DeleteDateColumn({type:"timestamp with time zone",name:"c_mat_deleted_at", nullable: true })
+    @DeleteDateColumn({type:dateType,name:"c_mat_deleted_at", nullable: true })
     cMatDeletedAt?:Date;
 }

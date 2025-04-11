@@ -11,12 +11,12 @@ export const courseRepository: Repository<Courses> = postgresDataSource.getRepos
 export const getCourses=async(getUserArgs:getPaginationArgsInput)=>{
     const page=getUserArgs.page?getUserArgs.page:1
     const pageSize=getUserArgs.pageSize?getUserArgs.pageSize:10
-    const searchCourse=getUserArgs.c_name?getUserArgs.c_name:""
+    const search=getUserArgs.c_name?getUserArgs.c_name:""
     const skip=(page-1)*pageSize
     try{
         return courseRepository.find({
             where:{
-                cName:ILike(`%${searchCourse}%`)
+                cName:ILike(`%${search}%`)
             },
             take:pageSize,
             skip,
@@ -40,8 +40,8 @@ export const isAuthorized = async (context: Context,authorizedRole:userRole[]) =
     }
 }
 
-export const isCourse=async(c_id:string)=>{
-    const course = await courseRepository.findOne({where:{cId:c_id}})
+export const isCourse=async(cId:string)=>{
+    const course = await courseRepository.findOne({where:{cId}})
     if(!course){
         throw new Error("Course not exist")
     }
@@ -49,14 +49,16 @@ export const isCourse=async(c_id:string)=>{
 
 export const addCourse = async ({ c_name }: { c_name: string }) => {
     try {
-        const isCourse=await courseRepository.find({where:{cName:c_name.toLowerCase()}})
-        if(isCourse){
+        const courses=await courseRepository.find({where:{cName:c_name.toLowerCase()}})
+        console.log(courses)
+        if(courses.length>0){
             throw new Error("Course already exist")
         }
         const course = courseRepository.create({ cName :c_name.toLowerCase()})
         await courseRepository.save(course)
         return "Course added successfully"
-    } catch (err) {
+    } catch (err:any) {
+        console.log(err)
         throw err
     }
 }
@@ -67,17 +69,19 @@ export const updateCourses = async (updateCourseArgs: updateCourseArgsType) => {
         await isCourse(c_id)
         await courseRepository.update({ cId:c_id }, { cName: c_newName })
         return "Course updated successfully"
-    } catch (err) {
+    } catch (err:any) {
+        console.log(err)
         throw err
     }
 }
 
-export const deleteCourse = async( c_id : string )=>{
+export const deleteCourse = async( cId : string )=>{
     try{
-        await isCourse(c_id)
-        await courseRepository.softDelete({cId:c_id})
+        await isCourse(cId)
+        await courseRepository.softDelete({cId})
         return "Course deleted successfully"
-    }catch(err){
+    }catch(err:any){
+        console.log(err)
         throw err
     }
 }

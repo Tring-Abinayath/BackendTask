@@ -9,4 +9,4 @@ export const studAssignmentSubmitTypedefs=gql`
     type Query{
         getStudAssignmentSubmit:[AssignmentSubmit]
     }
-`
+`;

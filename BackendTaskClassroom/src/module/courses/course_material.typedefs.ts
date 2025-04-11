@@ -21,4 +21,4 @@ export const courseMaterialsTypedefs=gql`
         updateCourseMaterial(c_mat_id:String!,c_mat_newUpload:String!,c_id:String!):String
         deleteCourseMaterial(c_mat_id:String!,c_id:String!):String
     }
-`
+`;

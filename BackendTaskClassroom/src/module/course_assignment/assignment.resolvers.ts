@@ -8,7 +8,7 @@ export const assignmentResolvers={
     Query:{
         getAssignment:async(_:any,{c_id}:{c_id:string},context:Context)=>{
             try{
-                isAuthorized(context,[userRole.Admin,userRole.Student])
+                await isAuthorized(context,[userRole.Admin,userRole.Student])
                 return getAssignment(c_id)
             }catch(err:any){
                 throw new Error(err.message)
@@ -18,7 +18,7 @@ export const assignmentResolvers={
     Mutation:{
         createAssignment:async(_:any,assignmentArgs:assignmentArgsType,context:Context)=>{
             try{
-                isAuthorized(context,[userRole.Admin])
+                await isAuthorized(context,[userRole.Admin])
                 return createAssignment(assignmentArgs)
             }catch(err:any){
                 throw new Error(err.message)
@@ -26,7 +26,7 @@ export const assignmentResolvers={
         },
         updateAssignment:async(_:any,updateAssignmentArgs:updateAssignmentArgsType,context:Context)=>{
             try{
-                isAuthorized(context,[userRole.Admin])
+                await isAuthorized(context,[userRole.Admin])
                 return updateAssignment(updateAssignmentArgs)
             }catch(err:any){
                 throw new Error(err.message)
@@ -34,7 +34,7 @@ export const assignmentResolvers={
         },
         deleteAssignment:async(_:any,assignmentArgs:assignmentArgsType,context:Context)=>{
             try{
-                isAuthorized(context,[userRole.Admin])
+                await isAuthorized(context,[userRole.Admin])
                 return deleteAssignment(assignmentArgs)
             }catch(err:any){
                 throw new Error(err.message)

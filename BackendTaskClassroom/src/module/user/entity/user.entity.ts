@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, OneToMany} from "typeorm";
 import { StudentAssignment } from "../../student/entity/student_assignment.entity";
 import { StudentScore } from "../../student/entity/student_score.entity";
+import { dateType } from "../../entityDateType";
 
 export enum userRole {
   Admin = "admin",
@@ -32,12 +33,12 @@ export class User {
   @OneToMany(() => StudentScore, (score) => score.userScore)
   scores!: StudentScore[];
 
-  @CreateDateColumn({ type: "timestamp with time zone",name:"u_created_at"})
+  @CreateDateColumn({ type:dateType,name:"u_created_at"})
   uCreatedAt!: Date;
 
-  @UpdateDateColumn({ type: "timestamp with time zone",name:"u_updated_at"})
+  @UpdateDateColumn({ type:dateType,name:"u_updated_at"})
   uUpdatedAt!: Date;
 
-  @DeleteDateColumn({ type: "timestamp with time zone",name:"u_deleted_at", nullable: true })
+  @DeleteDateColumn({ type:dateType,name:"u_deleted_at", nullable: true })
   uDeletedAt?: Date;
 }
