@@ -15,10 +15,13 @@ export class QnBank{
     @JoinColumn({name:"c_id"})
     course!:Courses;
 
-    @OneToMany(()=>Questions,(question)=>question.qnBank)
+    @Column({name:"c_id"})
+    courseId!:string;
+
+    @OneToMany(()=>Questions,(question)=>question.qnBank,{cascade:true})
     question!:Questions[];
 
-    @OneToOne(() => StudentScore, (score) => score.qnBank)
+    @OneToMany(() => StudentScore, (score) => score.qnBank)
     score!: StudentScore;
 
     @CreateDateColumn({type:"timestamp with time zone",name:"qb_created_at"})
