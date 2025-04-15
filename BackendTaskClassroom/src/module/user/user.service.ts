@@ -8,8 +8,8 @@ import { getPaginationArgsInput } from "./user.resolvers";
 
 export const userRepository: Repository<User> = postgresDataSource.getRepository(User);
 export const getUsers = async (getUserArgs:getPaginationArgsInput) => {
-    const page=getUserArgs.page?getUserArgs.page:1
-    const pageSize=getUserArgs.pageSize?getUserArgs.pageSize:10
+    const page=getUserArgs.page
+    const pageSize=getUserArgs.pageSize
     const skip=(page-1)*pageSize
     try {
        return userRepository.find({

@@ -6,10 +6,10 @@ import { createAssignment, deleteAssignment, getAssignment, updateAssignment } f
 
 export const assignmentResolvers={
     Query:{
-        getAssignment:async(_:any,{c_id}:{c_id:string},context:Context)=>{
+        getAssignment:async(_:any,{cId}:{cId:string},context:Context)=>{
             try{
                 isAuthorized(context,[userRole.Admin,userRole.Student])
-                return getAssignment(c_id)
+                return getAssignment(cId)
             }catch(err:any){
                 throw new Error(err.message)
             }

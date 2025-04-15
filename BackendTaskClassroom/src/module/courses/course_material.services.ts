@@ -11,9 +11,9 @@ export const getCourseMaterial = async (getCourseMaterialArgs: getCourseMaterial
     try {
         const { c_id, bucket } = getCourseMaterialArgs
         await isCourse(c_id)
-        const page = getCourseMaterialArgs.page ? getCourseMaterialArgs.page : 1
-        const pageSize = getCourseMaterialArgs.pageSize ? getCourseMaterialArgs.pageSize : 10
-        const searchCourse = getCourseMaterialArgs.courseMaterialName ? getCourseMaterialArgs.courseMaterialName : ""
+        const page = getCourseMaterialArgs.page
+        const pageSize = getCourseMaterialArgs.pageSize
+        const searchCourse = getCourseMaterialArgs.courseMaterialName
         const skip = (page - 1) * pageSize
         const courseMaterials = await courseMaterial.find({
             where: {
@@ -32,15 +32,20 @@ export const getCourseMaterial = async (getCourseMaterialArgs: getCourseMaterial
             throw new Error("No course materials found for this course");
         }
 
-        const getMaterials = courseMaterials.map(async (material) => {
+        const getMaterials = await Promise.all(courseMaterials.map(async (material) => {
             const signedUrl = await downloadFromS3(bucket, material.cMatUpload)
-            return {
-                cMatId: material.cMatId,
-                cMatUpload: material.cMatUpload,
-                cId: material.course.cId,
-                url: signedUrl.url
+            try{
+                return {
+                    cMatId: material.cMatId,
+                    cMatUpload: material.cMatUpload,
+                    cId: material.course.cId,
+                    url: signedUrl.url
+                }
+
+            }catch(err:any){
+                throw new Error(err.message)
             }
-        });
+        }));
         return getMaterials;
 
     } catch (err: any) {
