@@ -17,8 +17,32 @@ export const quizTypedefs = gql`
         qnId:String!
         answerId:String!
     }
+    type Options{
+        op_id:String
+        option:String
+    }
+    type Questions{
+        qn_id:String
+        qn:String
+        options:[Options!]
+    }
+    type QnBank{
+        qb_id:String
+        qb_name:String
+        questions:[Questions!]!
+    }
+    type Query{
+        getQuiz(c_id:String!,pageSize:Int,page:Int,searchQb:String):[QnBank!]
+    }
+
     type Mutation{
         addQuiz(
+            c_id:String!,
+            qb_name:String!,
+            questions:[CreateQuestionInput!]!,
+        ):String
+        updateQuiz(
+            qb_id:String!,
             c_id:String!,
             qb_name:String!,
             questions:[CreateQuestionInput!]!,
